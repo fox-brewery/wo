@@ -73,7 +73,7 @@ impl eframe::App for MyApp {
 						self.current_view = CurrentView::OpenRepositoryView;
 						let bin = common::get_bin_file("app-repositories");
 
-						common::fork_gui_foreground(&bin.to_string_lossy(), &[]);
+						common::fork_gui_foreground(&bin.to_string_lossy(), [].to_vec());
 					}
 				});
 				cols[1].group(|ui| {

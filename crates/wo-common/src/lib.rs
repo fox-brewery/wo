@@ -53,7 +53,11 @@ pub fn good_fork() {
 	}
 }
 
-pub fn fork_gui_foreground(command: &str, args: &[&str]) {
+pub fn take_out() {
+	nix::unistd::setsid().unwrap();
+}
+
+pub fn fork_gui_foreground(command: &str, args: Vec<String>) {
 	unsafe {
 		match fork().expect("Failed to fork process") {
 			ForkResult::Parent { child } => {
