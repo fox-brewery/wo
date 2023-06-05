@@ -1,0 +1,7 @@
+[workspace]
+members = [
+	"crates/wo-common",
+	"crates/wo-defaults",
+	"crates/app-repositories",
+	"crates/wo-bin",
+]

@@ -1,0 +1,16 @@
+[package]
+name = "app-repositories"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.71"
+clap = { version = "4.0.15", features = ["derive"] }
+directories = "5.0.1"
+dirs = "4.0.0"
+eframe = "0.22.0"
+serde = { version = "1.0.152", features = ["derive"] }
+serde_json = "1.0.91"
+toml = "0.7.4"
+wo-common = { version = "0.1.0", path = "../wo-common" }
+wo-defaults = { version = "0.1.0", path = "../wo-defaults" }

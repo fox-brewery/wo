@@ -1,0 +1,9 @@
+[package]
+name = "wo-common"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.71"
+fork = "0.1.21"
+nix = "0.26.2"

@@ -1,0 +1,3 @@
+{
+	"rust-analyzer.linkedProjects": ["./crates/wo-bin/Cargo.toml"]
+}
