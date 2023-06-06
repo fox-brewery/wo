@@ -12,6 +12,18 @@ use nix::{
 
 pub use repo::*;
 
+pub struct Defaults {
+	pub win_x_width: f32,
+	pub win_y_height: f32,
+}
+
+pub fn get_defaults() -> Defaults {
+	Defaults {
+		win_x_width: 720.0,
+		win_y_height: 1080.0,
+	}
+}
+
 pub fn get_bin_file(bin_name: &str) -> PathBuf {
 	let dir = Path::new("/storage/ur/storage_home/Docs/Programming/Repositories/default/wo");
 

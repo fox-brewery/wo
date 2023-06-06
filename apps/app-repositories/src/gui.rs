@@ -3,8 +3,6 @@ use std::process::Command;
 use anyhow::Result;
 use eframe::egui::{self, RichText, ScrollArea};
 
-pub struct RunGui;
-
 use wo_common as common;
 use wo_defaults;
 
@@ -62,6 +60,7 @@ impl eframe::App for AppRepositories {
 				});
 				cols[1].group(|ui| {
 					if let Some(repo) = self.hovered_repo.clone() {
+						ui.heading("Info");
 						ui.label(repo.name);
 						ui.label(repo.path.to_string_lossy());
 						if ui.button("Open").clicked() {

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Version=1.4
+Name=wowo
+Comment=A wonderful organizer
+Exec=/storage/ur/storage_home/Docs/Programming/Repositories/default/wo/target/debug/wo-bin
+Icon=/storage/ur/storage_home/Docs/Programming/Repositories/default/wo/share/icon.png
+Terminal=false
+Categories=Development
+Keywords=woo,root,app,wwoo,wowo,wow
+

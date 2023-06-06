@@ -1,4 +1,4 @@
-use std::{error::Error, fs, path::PathBuf};
+use std::{fs, path::PathBuf};
 
 use anyhow::{Ok, Result};
 

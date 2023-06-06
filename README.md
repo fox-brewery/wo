@@ -14,7 +14,6 @@ Some contexts include:
 ## TODO
 
 - Integrate `*mgr` tools
-- Update hotkeys for switching desktops, etc.
 
 Per repository:
 

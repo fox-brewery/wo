@@ -1,21 +1,15 @@
-use std::process::{exit, Command};
+use std::process::exit;
 
 use anyhow::Result;
-use eframe::egui::{self, Button, Label, RichText, ScrollArea, TextEdit};
+use eframe::{
+	egui::{self, RichText},
+	epaint::Vec2,
+};
 
 use wo_common as common;
 use wo_defaults;
 
-use crate::{repo, util};
-
-pub struct RunGui;
-
-enum CurrentView {
-	DefaultView,
-	OpenRepositoryView,
-	KeybindingsView,
-	ChooseAppsView,
-}
+use crate::util;
 
 pub fn run() -> Result<(), eframe::Error> {
 	let defaults = wo_defaults::get_defaults();
@@ -24,27 +18,40 @@ pub fn run() -> Result<(), eframe::Error> {
 		initial_window_size: Some(egui::vec2(defaults.win_x_width, defaults.win_y_height)),
 		..Default::default()
 	};
-	eframe::run_native("repomgr", options, Box::new(|_cc| Box::<MyApp>::default()))
+	eframe::run_native("wo", options, Box::new(|_cc| Box::<MyApp>::default()))
 }
 
-struct MyApp {
-	current_view: CurrentView,
-	search_txt: String,
-	hovered_repo: Option<repo::Repo>,
-}
+struct MyApp {}
 
 impl Default for MyApp {
 	fn default() -> Self {
-		Self {
-			current_view: CurrentView::DefaultView,
-			search_txt: String::new(),
-			hovered_repo: Option::None,
-		}
+		Self {}
 	}
 }
 
 impl eframe::App for MyApp {
 	fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+		let make_grid_item = |ui: &mut egui::Ui, button_text: &str| {
+			egui::Frame::default()
+				.rounding(5.0)
+				.fill(egui::Color32::from_rgb(33, 37, 41))
+				.show(ui, |ui| {
+					ui.set_width(150.0);
+					ui.set_height(150.0);
+
+					ui.centered_and_justified(|ui| {
+						if ui
+							.button(RichText::new(button_text).size(16.0).strong())
+							.clicked()
+						{
+							let bin = common::get_bin_file(button_text);
+
+							common::fork_gui_foreground(&bin.to_string_lossy(), [].to_vec());
+						}
+					});
+				});
+		};
+
 		egui::TopBottomPanel::top("top").show(ctx, |ui| {
 			ui.horizontal(|ui| {
 				ui.menu_button("File", |ui| {
@@ -54,7 +61,7 @@ impl eframe::App for MyApp {
 				});
 
 				ui.menu_button("Edit", |ui| {
-					if ui.button("Copy Binary").clicked() {
+					if ui.button("Copy Binary and Desktop Entry").clicked() {
 						util::write_desktop_entry().expect("Failed to write desktop entry");
 					}
 				});
@@ -66,84 +73,19 @@ impl eframe::App for MyApp {
 			ui.separator();
 			ui.add_space(5.0);
 
-			// ScrollArea::vertical().show(ui, |ui| {
-			ui.columns(3, |cols| {
-				cols[0].group(|ui| {
-					if ui.button("Open Repository").clicked() {
-						self.current_view = CurrentView::OpenRepositoryView;
-						let bin = common::get_bin_file("app-repositories");
+			egui::Grid::new("app-grid")
+				.spacing(Vec2::new(10.0, 10.0))
+				.show(ui, |ui| {
+					make_grid_item(ui, "app-repositories");
+					make_grid_item(ui, "app-keybindings");
+					make_grid_item(ui, "app-project");
+					ui.end_row();
 
-						common::fork_gui_foreground(&bin.to_string_lossy(), [].to_vec());
-					}
+					make_grid_item(ui, "context-shell");
+					make_grid_item(ui, "context-project");
+					// make_grid_item(ui, "app-");
+					ui.end_row();
 				});
-				cols[1].group(|ui| {
-					if ui.button("Configure Default Apps (choose)").clicked() {
-						self.current_view = CurrentView::ChooseAppsView;
-					}
-				});
-				cols[1].group(|ui| {
-					if ui.button("Update Keybindings").clicked() {
-						self.current_view = CurrentView::KeybindingsView;
-					}
-				});
-			});
-			// });
-			ui.separator();
-
-			match self.current_view {
-				CurrentView::DefaultView => {
-					ui.heading("This is the default view");
-				}
-				CurrentView::OpenRepositoryView => {
-					let repos = repo::get_repos().unwrap();
-
-					ui.columns(2, |cols| {
-						cols[0].group(|ui| {
-							ui.text_edit_singleline(&mut self.search_txt).changed();
-							ScrollArea::vertical().show(ui, |ui| {
-								for repo in repos {
-									if self.search_txt.is_empty() || repo.name.contains(&self.search_txt) {
-										ui.horizontal(|ui| {
-											if ui.label(&repo.name).hovered() {
-												self.hovered_repo = Option::Some(repo.clone());
-											}
-										});
-									}
-								}
-							});
-						});
-						cols[1].group(|ui| {
-							if let Some(repo) = self.hovered_repo.clone() {
-								ui.label(repo.name);
-								ui.label(repo.path.to_string_lossy());
-								if ui.button("Open").clicked() {
-									Command::new("code").arg(repo.path.clone()).spawn().unwrap();
-									println!("Opening {}", repo.path.display())
-								}
-							}
-						});
-					});
-				}
-				CurrentView::KeybindingsView => {
-					ui.heading("This is the keybindings view");
-
-					if ui.button("Transform").clicked() {
-						Command::new("dconf")
-							.arg("write")
-							.arg("/org/mate/marco/global-keybindings/switch-to-workspace-left")
-							.arg("'<Primary><Mod4>Left'")
-							.spawn()
-							.unwrap();
-						Command::new("dconf")
-							.arg("write")
-							.arg("/org/mate/marco/global-keybindings/switch-to-workspace-right")
-							.arg("'<Primary><Mod4>Right'")
-							.spawn()
-							.unwrap();
-					}
-				}
-				CurrentView::ChooseAppsView => {}
-			}
 		});
 	}
 }

@@ -9,16 +9,18 @@ pub fn write_desktop_entry() -> Result<()> {
 		.join("applications")
 		.join("wo.desktop");
 
+	// TODO: desktop-file-install --reubild-mime-info-cache
 	let content = "[Desktop Entry]
-Encoding=UTF-8
-Name=wo
-Exec=wo
-Icon=/home/edwin/.local/share/JetBrains/Toolbox/apps/Fleet/ch-0/.icon.png
-Comment=A tool manager
-Version=1.0
 Type=Application
-Categories=Development
+Version=1.5
+Name=wo
+Comment=A wonderful organizer
+Exec=/storage/ur/storage_home/Docs/Programming/Repositories/default/wo/target/debug/wo-bin
+Icon=/storage/ur/storage_home/Docs/Programming/Repositories/default/wo/share/wo.png
 Terminal=false
+Categories=Development
+Keywords=woo,root,app,wwoo,wowo,wow
+
 ";
 
 	fs::write(desktop_file, content)?;

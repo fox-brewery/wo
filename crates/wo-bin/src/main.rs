@@ -1,9 +1,4 @@
-use std::process;
-
-use eframe::egui::TextBuffer;
-
 mod gui;
-mod repo;
 mod util;
 
 fn main() {
