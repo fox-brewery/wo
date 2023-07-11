@@ -1,4 +1,4 @@
-use std::process::exit;
+use std::process::{exit, Command};
 
 use anyhow::Result;
 use eframe::{
@@ -7,12 +7,11 @@ use eframe::{
 };
 
 use wo_common as common;
-use wo_defaults;
 
 use crate::util;
 
 pub fn run() -> Result<(), eframe::Error> {
-	let defaults = wo_defaults::get_defaults();
+	let defaults = wo_common::get_defaults();
 
 	let options = eframe::NativeOptions {
 		initial_window_size: Some(egui::vec2(defaults.win_x_width, defaults.win_y_height)),
@@ -64,6 +63,12 @@ impl eframe::App for MyApp {
 					if ui.button("Copy Binary and Desktop Entry").clicked() {
 						util::write_desktop_entry().expect("Failed to write desktop entry");
 					}
+					if ui.button("Open VSCode").clicked() {
+						Command::new("code")
+							.arg("/storage/ur/storage_home/Docs/Programming/Repositories/default/wo")
+							.spawn()
+							.expect("Failed to open VSCode");
+					}
 				});
 			})
 		});
@@ -76,14 +81,18 @@ impl eframe::App for MyApp {
 			egui::Grid::new("app-grid")
 				.spacing(Vec2::new(10.0, 10.0))
 				.show(ui, |ui| {
-					make_grid_item(ui, "app-repositories");
+					make_grid_item(ui, "app-backups");
 					make_grid_item(ui, "app-keybindings");
+					make_grid_item(ui, "app-notepad");
+					ui.end_row();
+
+					make_grid_item(ui, "app-passwords");
 					make_grid_item(ui, "app-project");
+					make_grid_item(ui, "app-repositories");
 					ui.end_row();
 
 					make_grid_item(ui, "context-shell");
 					make_grid_item(ui, "context-project");
-					// make_grid_item(ui, "app-");
 					ui.end_row();
 				});
 		});

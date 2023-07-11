@@ -1,2 +1,2 @@
 [workspace]
-members = ["crates/wo-common", "crates/wo-defaults", "crates/wo-bin", "apps/*"]
+members = ["crates/wo-common", "crates/wo-bin", "apps/*"]

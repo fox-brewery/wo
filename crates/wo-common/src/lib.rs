@@ -1,3 +1,4 @@
+mod passwords;
 mod repo;
 
 use fork::{daemon, Fork};
@@ -10,6 +11,7 @@ use nix::{
 	unistd::{fork, ForkResult},
 };
 
+pub use passwords::*;
 pub use repo::*;
 
 pub struct Defaults {
