@@ -1,2 +1,3 @@
 [workspace]
 members = ["crates/wo-common", "crates/wo-bin", "apps/*"]
+resolver = '2'

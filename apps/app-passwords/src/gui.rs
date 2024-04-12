@@ -61,7 +61,7 @@ impl eframe::App for AppPasswords {
 				let dir = directories::BaseDirs::new().unwrap().data_local_dir().join("password-store");
 
 				jobs_map.clear();
-				let walker = WalkDir::new(dir).into_iter();
+				let walker = WalkDir::new(dir.clone()).into_iter();
 				for entry in walker
 					.filter_entry(|e| !is_hidden(e))
 					.filter_map(|e| e.ok())
@@ -90,7 +90,7 @@ impl eframe::App for AppPasswords {
 				// 	});
 				// }
 
-				let walker = WalkDir::new(dir).into_iter();
+				let walker = WalkDir::new(dir.clone()).into_iter();
 				for entry in walker
 					.filter_entry(|e| !is_hidden(e))
 					.filter_map(|e| e.ok())

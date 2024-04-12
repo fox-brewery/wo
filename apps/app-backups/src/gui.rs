@@ -59,10 +59,10 @@ impl eframe::App for AppPasswords {
 			ui.heading("/storage/other");
 			if ui.button("Backup Now").clicked() {
 				if !self.output1cmd.is_some() {
-					thread::spawn(|| {
-						let val = String::from("hi");
-						self.tx.send(val).unwrap();
-					});
+					// thread::spawn(|| {
+					// 	let val = String::from("hi");
+					// 	self.tx.send(val).unwrap();
+					// });
 
 					self.output1cmd = Option::Some(
 						Command::new("bash")
